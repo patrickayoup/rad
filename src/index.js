@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Stack from 'react-bootstrap/Stack';
 
-import { NOUNS } from './data'
+import { NOUNS, CASES, NOUN_HEADERS } from './data'
 
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -22,15 +22,15 @@ class DeclinationRow extends React.Component {
     async setAnswer(idx, e) {
         let _answer = this.state.answer.slice();
         _answer[idx] = e.target.value;
-        await this.setState({ answer: _answer });
+        this.setState({ answer: _answer });
     }
 
     render() {
         return (
             <tr>
                 <th>{this.props.case}</th>
-                <td><input onChange={(e) => this.setAnswer(0, e)} tabIndex={this.props.rowNumber} type="text"></input>{this.props.showSolution && this.state.answer[0] !== this.props.solution[0] ? <span>{this.props.solution[0]}</span> : null}</td>
-                <td><input onChange={(e) => this.setAnswer(1, e)} tabIndex={this.props.rowNumber + 4} type="text"></input>{this.props.showSolution && this.state.answer[1] !== this.props.solution[1] ? <span>{this.props.solution[1]}</span> : null}</td>
+                <td key={this.props.solution[0]}><input onChange={(e) => this.setAnswer(0, e)} tabIndex={this.props.rowNumber} type="text"></input>{this.props.showSolution && this.state.answer[0] !== this.props.solution[0] ? <span>{this.props.solution[0]}</span> : null}</td>
+                <td key={this.props.solution[1]}><input onChange={(e) => this.setAnswer(1, e)} tabIndex={this.props.rowNumber + 4} type="text"></input>{this.props.showSolution && this.state.answer[1] !== this.props.solution[1] ? <span>{this.props.solution[1]}</span> : null}</td>
             </tr >
         )
     }
@@ -39,7 +39,7 @@ class DeclinationRow extends React.Component {
 function DeclinationHeaderRow(props) {
     return (
         <thead>
-            <tr>{props.headers.map((h) => (<th>{h}</th>))}</tr>
+            <tr>{props.headers.map((h) => (<th key={h}>{h}</th>))}</tr>
         </thead>
     );
 }
@@ -53,7 +53,7 @@ function NounDeclinationTable(props) {
         <Table striped bordered hover>
             <DeclinationHeaderRow headers={props.headers} />
             <tbody>
-                {props.cases.map((c, idx) => (<DeclinationRow rowNumber={idx + 1} case={c} solution={props.solution[idx]} showSolution={props.showSolution} />))}
+                {props.cases.map((c, idx) => (<DeclinationRow key={c} rowNumber={idx + 1} case={c} solution={props.solution[idx]} showSolution={props.showSolution} />))}
             </tbody>
         </Table>
     )
@@ -64,35 +64,19 @@ class Rad extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            cases: [
-                'ονομαστική',
-                'γενική',
-                'αιτιατική',
-                'κλητική'
-            ],
-            headers: [
-                'πτώση',
-                'ενικός',
-                'πληθυντικός'
-            ],
-            nouns: [
-                'αγώνας',
-                'μαθητής',
-                'δρόμος',
-                'θάλασσα',
-                'ψυχή'
-            ],
             currentIndex: 0,
             showSolution: false
         }
     }
 
     render() {
-        const currentNoun = this.state.nouns[this.state.currentIndex];
+        const currentNoun = Object.keys(NOUNS)[this.state.currentIndex];
+        const solution = NOUNS[currentNoun];
+
         return (
-            < div >
+            <div>
                 <NounInstruction noun={currentNoun} />
-                <NounDeclinationTable noun={currentNoun} headers={this.state.headers} cases={this.state.cases} solution={NOUNS[currentNoun]} showSolution={this.state.showSolution} />
+                <NounDeclinationTable noun={currentNoun} headers={NOUN_HEADERS} cases={CASES} solution={solution} showSolution={this.state.showSolution} />
                 <Stack gap="3">
                     <div><Button onClick={() => this.setState({ showSolution: true })} tabIndex="10">Μετάβαση</Button></div>
                     <div><Button onClick={() => this.setState({ currentIndex: (this.state.currentIndex + 1) % this.state.nouns.length })} tabIndex="10">Επόμενο</Button></div>
