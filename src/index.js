@@ -1,4 +1,9 @@
 import React from 'react';
+
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 import ReactDOM from 'react-dom/client';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
@@ -74,14 +79,24 @@ class Rad extends React.Component {
         const solution = NOUNS[currentNoun];
 
         return (
-            <div>
-                <NounInstruction noun={currentNoun} />
-                <NounDeclinationTable noun={currentNoun} headers={NOUN_HEADERS} cases={CASES} solution={solution} showSolution={this.state.showSolution} />
-                <Stack gap="3">
-                    <div><Button onClick={() => this.setState({ showSolution: true })} tabIndex="10">Μετάβαση</Button></div>
-                    <div><Button onClick={() => this.setState({ currentIndex: (this.state.currentIndex + 1) % this.state.nouns.length })} tabIndex="10">Επόμενο</Button></div>
-                </Stack>
-            </div >
+            <Container>
+                <Row>
+                    <Col><NounInstruction noun={currentNoun} /></Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <NounDeclinationTable noun={currentNoun} headers={NOUN_HEADERS} cases={CASES} solution={solution} showSolution={this.state.showSolution} />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Stack gap="3">
+                            <div><Button onClick={() => this.setState({ showSolution: true })} tabIndex="10">Μετάβαση</Button></div>
+                            <div><Button onClick={() => this.setState({ currentIndex: (this.state.currentIndex + 1) % this.state.nouns.length })} tabIndex="10">Επόμενο</Button></div>
+                        </Stack>
+                    </Col>
+                </Row>
+            </Container>
         )
     }
 }
