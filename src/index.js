@@ -55,7 +55,7 @@ function NounInstruction(props) {
 
 function NounDeclinationTable(props) {
     return (
-        <Table striped bordered hover>
+        <Table responsive striped bordered hover>
             <DeclinationHeaderRow headers={props.headers} />
             <tbody>
                 {props.cases.map((c, idx) => (<DeclinationRow key={c} rowNumber={idx + 1} case={c} solution={props.solution[idx]} showSolution={props.showSolution} />))}
