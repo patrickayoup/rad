@@ -20,7 +20,7 @@ class DeclinationRow extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            answer: [null, null]
+            answer: ['', '']
         };
     }
 
@@ -30,13 +30,35 @@ class DeclinationRow extends React.Component {
         this.setState({ answer: _answer });
     }
 
+    shouldShowSolution(idx) {
+        return this.props.showSolution
+            && this.state.answer[idx].toLowerCase() !== this.props.solution[idx].toLowerCase();
+    }
+
     render() {
         return (
             <tr>
                 <th>{this.props.case}</th>
-                <td key={this.props.solution[0]}><input onChange={(e) => this.setAnswer(0, e)} tabIndex={this.props.rowNumber} type="text"></input>{this.props.showSolution && this.state.answer[0] !== this.props.solution[0] ? <span>{this.props.solution[0]}</span> : null}</td>
-                <td key={this.props.solution[1]}><input onChange={(e) => this.setAnswer(1, e)} tabIndex={this.props.rowNumber + 4} type="text"></input>{this.props.showSolution && this.state.answer[1] !== this.props.solution[1] ? <span>{this.props.solution[1]}</span> : null}</td>
-            </tr >
+                <td key={this.props.solution[0]}>
+                    <div>
+                        <input onChange={(e) => this.setAnswer(0, e)}
+                            tabIndex={this.props.rowNumber}
+                            type="text">
+                        </input>
+                    </div>
+                    {this.shouldShowSolution(0) ? <div>{this.props.solution[0]}</div> : null}
+                </td>
+
+                <td key={this.props.solution[1]}>
+                    <div>
+                        <input onChange={(e) => this.setAnswer(1, e)}
+                            tabIndex={this.props.rowNumber + 4}
+                            type="text">
+                        </input>
+                    </div>
+                    {this.shouldShowSolution(1) ? <span>{this.props.solution[1]}</span> : null}
+                </td>
+            </tr>
         )
     }
 }
@@ -58,7 +80,13 @@ function NounDeclinationTable(props) {
         <Table responsive striped bordered hover>
             <DeclinationHeaderRow headers={props.headers} />
             <tbody>
-                {props.cases.map((c, idx) => (<DeclinationRow key={c} rowNumber={idx + 1} case={c} solution={props.solution[idx]} showSolution={props.showSolution} />))}
+                {props.cases.map((c, idx) => (
+                    <DeclinationRow key={c}
+                        rowNumber={idx + 1}
+                        case={c}
+                        solution={props.solution[idx]}
+                        showSolution={props.showSolution} />
+                ))}
             </tbody>
         </Table>
     )
@@ -74,6 +102,20 @@ class Rad extends React.Component {
         }
     }
 
+    submitPressed = () => {
+        this.setState({ showSolution: true })
+    }
+
+    nextPressed = () => {
+        const nNouns = Object.keys(NOUNS).length;
+        const nextIndex = (this.state.currentIndex + 1) % nNouns;
+
+        this.setState({
+            showSolution: false,
+            currentIndex: nextIndex
+        });
+    }
+
     render() {
         const currentNoun = Object.keys(NOUNS)[this.state.currentIndex];
         const solution = NOUNS[currentNoun];
@@ -85,14 +127,24 @@ class Rad extends React.Component {
                 </Row>
                 <Row>
                     <Col>
-                        <NounDeclinationTable noun={currentNoun} headers={NOUN_HEADERS} cases={CASES} solution={solution} showSolution={this.state.showSolution} />
+                        <NounDeclinationTable noun={currentNoun}
+                            headers={NOUN_HEADERS}
+                            cases={CASES}
+                            solution={solution}
+                            showSolution={this.state.showSolution} />
                     </Col>
                 </Row>
                 <Row>
                     <Col>
                         <Stack gap="3">
-                            <div><Button onClick={() => this.setState({ showSolution: true })} tabIndex="10">Μετάβαση</Button></div>
-                            <div><Button onClick={() => this.setState({ currentIndex: (this.state.currentIndex + 1) % this.state.nouns.length })} tabIndex="10">Επόμενο</Button></div>
+                            <Button onClick={this.submitPressed}
+                                tabIndex="10">
+                                Μετάβαση
+                            </Button>
+                            <Button onClick={this.nextPressed}
+                                tabIndex="10">
+                                Επόμενο
+                            </Button>
                         </Stack>
                     </Col>
                 </Row>
