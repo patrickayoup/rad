@@ -37,9 +37,9 @@ const Rad = () => {
       <Container>
         <NavBar />
         <Routes>
-          <Route path="/rad" element={nounsComponent} />
-          <Route path="/rad/nouns" element={nounsComponent} />
-          <Route path="/rad/verbs" element={verbsComponent} />
+          <Route path="" element={nounsComponent} />
+          <Route path="nouns" element={nounsComponent} />
+          <Route path="verbs" element={verbsComponent} />
         </Routes>
       </Container>
     </>
