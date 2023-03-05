@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import Rad from "./rad";
+import Rad from "./components/rad";
 
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";

@@ -3,7 +3,7 @@ import Table from "react-bootstrap/Table";
 import DeclinationRow from "./declinationRow";
 import DeclinationHeaderRow from "./declinationHeaderRow";
 
-export default function NounDeclinationTable(props) {
+export default function DeclinationTable(props) {
   return (
     <Table responsive striped bordered hover>
       <DeclinationHeaderRow headers={props.headers} />

@@ -5,13 +5,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
+import DeclinationInstruction from "../components/declinationTable/declinationInstruction";
+import DeclinationTable from "../components/declinationTable/declinationTable";
 
-import NounInstruction from "../components/nounInstruction";
-import NounDeclinationTable from "../components/nounDeclinationTable";
-
-import { NOUNS, CASES, NOUN_HEADERS } from "../components/data";
-
-export default class Nouns extends React.Component {
+export default class DeclinationPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,8 +21,8 @@ export default class Nouns extends React.Component {
   };
 
   nextPressed = () => {
-    const nNouns = Object.keys(NOUNS).length;
-    const nextIndex = (this.state.currentIndex + 1) % nNouns;
+    const nItems = Object.keys(this.props.items).length;
+    const nextIndex = (this.state.currentIndex + 1) % nItems;
 
     this.setState({
       showSolution: false,
@@ -34,22 +31,24 @@ export default class Nouns extends React.Component {
   };
 
   render() {
-    const currentNoun = Object.keys(NOUNS)[this.state.currentIndex];
-    const solution = NOUNS[currentNoun];
+    const currentItem = Object.keys(this.props.items)[this.state.currentIndex];
+    const solution = this.props.items[currentItem];
 
     return (
       <Container>
         <Row>
           <Col>
-            <NounInstruction noun={currentNoun} />
+            <DeclinationInstruction
+              instructionPhrase={this.props.instructionPhrase}
+              item={currentItem}
+            />
           </Col>
         </Row>
         <Row>
           <Col>
-            <NounDeclinationTable
-              noun={currentNoun}
-              headers={NOUN_HEADERS}
-              cases={CASES}
+            <DeclinationTable
+              headers={this.props.headers}
+              cases={this.props.rowHeaders}
               solution={solution}
               showSolution={this.state.showSolution}
             />
