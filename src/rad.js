@@ -1,76 +1,24 @@
-import React from 'react';
+import React from "react";
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import Stack from 'react-bootstrap/Stack';
+import Container from "react-bootstrap/Container";
+import { Route, Routes } from "react-router-dom";
+import NavBar from "./components/navBar";
+import Nouns from "./pages/nouns";
+import Verbs from "./pages/verbs";
 
-import NavBar from './navBar';
-import NounInstruction from './nounInstruction';
-import NounDeclinationTable from './nounDeclinationTable';
+const Rad = () => {
+  return (
+    <>
+      <Container>
+        <NavBar />
+        <Routes>
+          <Route path="/rad" element={<Nouns />} />
+          <Route path="/rad/nouns" element={<Nouns />} />
+          <Route path="/rad/verbs" element={<Verbs />} />
+        </Routes>
+      </Container>
+    </>
+  );
+};
 
-
-import { NOUNS, CASES, NOUN_HEADERS } from './data'
-
-export default class Rad extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            currentIndex: 0,
-            showSolution: false
-        }
-    }
-
-    submitPressed = () => {
-        this.setState({ showSolution: true })
-    }
-
-    nextPressed = () => {
-        const nNouns = Object.keys(NOUNS).length;
-        const nextIndex = (this.state.currentIndex + 1) % nNouns;
-
-        this.setState({
-            showSolution: false,
-            currentIndex: nextIndex
-        });
-    }
-
-    render() {
-        const currentNoun = Object.keys(NOUNS)[this.state.currentIndex];
-        const solution = NOUNS[currentNoun];
-
-        return (
-            <Container>
-                <NavBar />
-                <Row>
-                    <Col><NounInstruction noun={currentNoun} /></Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <NounDeclinationTable noun={currentNoun}
-                            headers={NOUN_HEADERS}
-                            cases={CASES}
-                            solution={solution}
-                            showSolution={this.state.showSolution} />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <Stack gap="3">
-                            <Button onClick={this.submitPressed}
-                                tabIndex="10">
-                                Μετάβαση
-                            </Button>
-                            <Button onClick={this.nextPressed}
-                                tabIndex="10">
-                                Επόμενο
-                            </Button>
-                        </Stack>
-                    </Col>
-                </Row>
-            </Container>
-        )
-    }
-}
+export default Rad;

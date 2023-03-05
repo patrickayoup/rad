@@ -1,10 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import Rad from "./rad";
 
-import Rad from './rad';
-
-import './index.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<Rad />);
+root.render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <Rad />
+    </BrowserRouter>
+  </React.StrictMode>
+);
